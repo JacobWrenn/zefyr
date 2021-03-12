@@ -127,7 +127,7 @@ class ResetLineFormatOnNewLineRule extends InsertRule {
     if (text != '\n') return null;
 
     final iter = DeltaIterator(document);
-    iter.skip(index);
+    final skip = iter.skip(index);
     final target = iter.next();
 
     // We have an embed right after us, ignore (embeds handled by a different rule).
@@ -141,11 +141,39 @@ class ResetLineFormatOnNewLineRule extends InsertRule {
           target.attributes.containsKey(NotusAttribute.heading.key)) {
         resetStyle = NotusAttribute.heading.unset.toJson();
       }
-      return Delta()
-        ..retain(index)
-        ..insert('\n', target.attributes)
-        ..retain(1, resetStyle)
-        ..trim();
+      try {
+        final previousText = skip.data as String;
+
+        // Split text of previous operation in lines and words and take the last
+        // word to test.
+        final candidate = previousText.split('\n').last.split(' ').last;
+
+        final link = Uri.parse(candidate);
+        if (!['https', 'http'].contains(link.scheme)) {
+          // TODO: might need a more robust way of validating links here.
+          throw Error();
+        }
+        final attributes = skip.attributes ?? <String, dynamic>{};
+
+        // Do nothing if already formatted as link.
+        if (attributes.containsKey(NotusAttribute.link.key)) return null;
+
+        attributes
+            .addAll(NotusAttribute.link.fromString(link.toString()).toJson());
+
+        return Delta()
+          ..retain(index - candidate.length)
+          ..retain(candidate.length, attributes)
+          ..insert('\n', target.attributes)
+          ..retain(1, resetStyle)
+          ..trim();
+      } catch (e) {
+        return Delta()
+          ..retain(index)
+          ..insert('\n', target.attributes)
+          ..retain(1, resetStyle)
+          ..trim();
+      }
     }
     return null;
   }
