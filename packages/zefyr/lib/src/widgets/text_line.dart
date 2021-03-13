@@ -37,6 +37,7 @@ class TextLine extends StatelessWidget {
     final text = buildText(context, node);
     final strutStyle =
         StrutStyle.fromTextStyle(text.style, forceStrutHeight: true);
+    final theme = ZefyrTheme.of(context);
     return RichTextProxy(
       textStyle: text.style,
       textDirection: textDirection,
@@ -47,6 +48,7 @@ class TextLine extends StatelessWidget {
         textDirection: textDirection,
         strutStyle: strutStyle,
         textScaleFactor: MediaQuery.textScaleFactorOf(context),
+        textAlign: theme.centerAll ? TextAlign.center : null,
       ),
     );
   }

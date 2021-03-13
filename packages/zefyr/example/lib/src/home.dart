@@ -165,13 +165,16 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             color: Colors.white,
             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-            child: ZefyrEditor(
-              controller: _controller,
-              focusNode: _focusNode,
-              autofocus: true,
-              // readOnly: true,
-              // padding: EdgeInsets.only(left: 16, right: 16),
-              onLaunchUrl: _launchUrl,
+            child: ZefyrTheme(
+              data: ZefyrThemeData(centerAll: true),
+              child: ZefyrEditor(
+                controller: _controller,
+                focusNode: _focusNode,
+                autofocus: true,
+                // readOnly: true,
+                // padding: EdgeInsets.only(left: 16, right: 16),
+                onLaunchUrl: _launchUrl,
+              ),
             ),
           ),
         ),

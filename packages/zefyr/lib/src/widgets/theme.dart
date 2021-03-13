@@ -97,6 +97,9 @@ class ZefyrThemeData {
   /// Style theme for code blocks.
   final TextBlockTheme code;
 
+  /// Should everything be centered
+  final bool centerAll;
+
   ZefyrThemeData({
     this.bold,
     this.italic,
@@ -110,6 +113,7 @@ class ZefyrThemeData {
     this.lists,
     this.quote,
     this.code,
+    this.centerAll,
   });
 
   factory ZefyrThemeData.fallback(BuildContext context) {
@@ -204,6 +208,7 @@ class ZefyrThemeData {
           borderRadius: BorderRadius.circular(2),
         ),
       ),
+      centerAll: false,
     );
   }
 
@@ -220,6 +225,7 @@ class ZefyrThemeData {
     TextBlockTheme lists,
     TextBlockTheme quote,
     TextBlockTheme code,
+    bool centerAll,
   }) {
     return ZefyrThemeData(
       bold: bold ?? this.bold,
@@ -234,6 +240,7 @@ class ZefyrThemeData {
       lists: lists ?? this.lists,
       quote: quote ?? this.quote,
       code: code ?? this.code,
+      centerAll: centerAll ?? this.centerAll,
     );
   }
 
@@ -251,6 +258,7 @@ class ZefyrThemeData {
       lists: other.lists,
       quote: other.quote,
       code: other.code,
+      centerAll: other.centerAll,
     );
   }
 }
